@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { Box, Flex, Center, Button, Input, Heading, Text, useToast } from '@chakra-ui/react';
+import React, { useState } from "react";
+import {
+  Box,
+  Flex,
+  Center,
+  Button,
+  Input,
+  Heading,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import { API_BASE_URL } from "../../config";
 
 const LoginPage = ({ onLogin, onViewChange }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [organizationName, setOrganizationName] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false); // new state for processing
   const toast = useToast();
@@ -14,11 +24,11 @@ const LoginPage = ({ onLogin, onViewChange }) => {
   const handleLogin = async () => {
     setIsProcessing(true);
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json',
+          "Content-Type": "application/json",
+          accept: "application/json",
         },
         body: JSON.stringify({ username, password }),
       });
@@ -26,9 +36,9 @@ const LoginPage = ({ onLogin, onViewChange }) => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('jwtToken', data.jwtToken);
+        localStorage.setItem("jwtToken", data.jwtToken);
 
-        onViewChange('welcome');
+        onViewChange("welcome");
         onLogin(data.jwtToken);
       } else {
         setErrorMessage("Proszę sprawdzić czy hasło i login są poprawne.");
@@ -48,11 +58,11 @@ const LoginPage = ({ onLogin, onViewChange }) => {
     setIsProcessing(true); // set processing state
 
     try {
-      const response = await fetch('http://localhost:8080/auth/register', {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json',
+          "Content-Type": "application/json",
+          accept: "application/json",
         },
         body: JSON.stringify({ username, password, organizationName }),
       });
@@ -67,11 +77,11 @@ const LoginPage = ({ onLogin, onViewChange }) => {
           isClosable: true,
         });
         setIsRegistering(false);
-        setUsername('');
-        setPassword('');
-        setConfirmPassword('');
-        setOrganizationName('');
-        setErrorMessage('');
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("");
+        setOrganizationName("");
+        setErrorMessage("");
       } else {
         setErrorMessage(data.statusMsg || "Rejestracja nie powiodła się.");
       }
@@ -129,11 +139,19 @@ const LoginPage = ({ onLogin, onViewChange }) => {
         )}
         <Flex justify="center">
           {isRegistering ? (
-            <Button colorScheme="orange" onClick={handleRegister} isDisabled={isProcessing}>
+            <Button
+              colorScheme="orange"
+              onClick={handleRegister}
+              isDisabled={isProcessing}
+            >
               Zarejestruj
             </Button>
           ) : (
-            <Button colorScheme="teal" onClick={handleLogin} isDisabled={isProcessing}>
+            <Button
+              colorScheme="teal"
+              onClick={handleLogin}
+              isDisabled={isProcessing}
+            >
               Login
             </Button>
           )}
@@ -144,10 +162,10 @@ const LoginPage = ({ onLogin, onViewChange }) => {
             cursor="pointer"
             onClick={() => {
               setIsRegistering(!isRegistering);
-              setErrorMessage('');
+              setErrorMessage("");
             }}
           >
-            {isRegistering ? 'Back to Login' : 'Sign up'}
+            {isRegistering ? "Back to Login" : "Sign up"}
           </Text>
         </Flex>
       </Box>

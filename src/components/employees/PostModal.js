@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   FormControl,
@@ -12,13 +12,14 @@ import {
   ModalBody,
   ModalCloseButton,
   useToast,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { API_BASE_URL } from "../../config";
 
 const PostModal = ({ isOpen, onClose, addEmployee }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [age, setAge] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
   const toast = useToast();
 
   const handleAddEmployee = async () => {
@@ -30,26 +31,26 @@ const PostModal = ({ isOpen, onClose, addEmployee }) => {
     };
 
     try {
-      const token = localStorage.getItem('jwtToken');
-      const response = await fetch('http://localhost:8080/api/employees', {
-        method: 'POST',
+      const token = localStorage.getItem("jwtToken");
+      const response = await fetch(`${API_BASE_URL}/api/employees`, {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`, // Replace with your actual token
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`, // Replace with your actual token
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newEmployee)
+        body: JSON.stringify(newEmployee),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       addEmployee(newEmployee); // Update the UI with the new employee
       onClose();
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setAge('');
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setAge("");
       toast({
         title: "Employee added.",
         description: "New employee has been successfully added.",
